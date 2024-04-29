@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 Christina Sørensen
+// SPDX-FileCopyrightText: 2024 Christina Sørensen
 // SPDX-FileContributor: Christina Sørensen
 //
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -39,7 +39,7 @@ async fn main() {
     let app = Router::new()
         .route(
             "/",
-            get(|| async { Redirect::to("https://github.com/cafkafk/rime") }),
+            get(|| async { Redirect::to("https://github.com/cafkafk/ha-registry") }),
         )
         .merge(get_api_routes())
         .layer(Extension(config.clone()));
@@ -47,6 +47,9 @@ async fn main() {
     let listener = TcpListener::bind(&config.bind_addr())
         .await
         .expect("failed to bind");
+
+    info!("Listening on http://{:#?}", &config.bind_addr());
+
     axum::serve(listener, app)
         .await
         .expect("failed to serve app");

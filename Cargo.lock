@@ -445,6 +445,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "ha-registry"
+version = "0.0.1"
+dependencies = [
+ "axum",
+ "bytes",
+ "clap",
+ "clap_complete",
+ "clap_mangen",
+ "form_urlencoded",
+ "http-body-util",
+ "hyper 1.2.0",
+ "log",
+ "pretty_env_logger",
+ "regex",
+ "reqwest",
+ "semver",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "tokio",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -959,29 +982,6 @@ dependencies = [
  "wasm-bindgen-futures",
  "web-sys",
  "winreg",
-]
-
-[[package]]
-name = "rime"
-version = "0.1.8"
-dependencies = [
- "axum",
- "bytes",
- "clap",
- "clap_complete",
- "clap_mangen",
- "form_urlencoded",
- "http-body-util",
- "hyper 1.2.0",
- "log",
- "pretty_env_logger",
- "regex",
- "reqwest",
- "semver",
- "serde",
- "serde_json",
- "serde_yaml",
- "tokio",
 ]
 
 [[package]]
