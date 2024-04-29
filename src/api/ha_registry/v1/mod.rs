@@ -3,7 +3,6 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-pub mod routes;
+use axum::{extract::Extension, routing::get, Router};
 
-mod ha_registry;
-mod oci;
+pub mod routes;
