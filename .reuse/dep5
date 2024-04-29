@@ -1,0 +1,22 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: rime
+Upstream-Contact: Christina Sørensen <christina@cafkafk.com>
+Source: 
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...
+
+Files: flake.lock
+Copyright: 2024 Christina Sørensen
+License: EUPL-1.2
+
+Files: Cargo.lock
+Copyright: 2024 Christina Sørensen
+License: EUPL-1.2
+
+Files: .envrc
+Copyright: 2024 Christina Sørensen
+License: EUPL-1.2

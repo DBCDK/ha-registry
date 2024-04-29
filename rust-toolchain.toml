@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2024 Christina Sørensen
+# SPDX-FileContributor: Christina Sørensen
+#
+# SPDX-License-Identifier: EUPL-1.2
+
+[toolchain]
+channel = "stable"
+components = [
+  "rustfmt",
+  "rustc",
+  "rust-src",
+  "rust-analyzer",
+  "cargo",
+  "clippy",
+]
+profile = "minimal"
