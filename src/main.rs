@@ -5,6 +5,8 @@
 
 #![deny(clippy::unwrap_used)]
 
+use std::sync::Arc;
+
 use axum::{
     extract::Extension,
     http::StatusCode,
@@ -26,6 +28,8 @@ use api::routes::get_routes as get_api_routes;
 #[allow(unused)]
 use log::{debug, error, info, trace, warn};
 
+use crate::data::status::{ServerState, Status};
+
 async fn handler_404() -> impl IntoResponse {
     (StatusCode::NOT_FOUND, "404 - not found")
 }
@@ -46,6 +50,8 @@ async fn main() {
 
     trace!("{config:#?}");
 
+    let status = Arc::new(Status { server_state: ServerState::Healthy });
+
     let app = Router::new()
         .route(
             "/",
@@ -53,6 +59,7 @@ async fn main() {
         )
         .merge(get_api_routes())
         .fallback(handler_404)
+        .layer(Extension(status))
         .layer(Extension(config.clone()));
 
     let listener = TcpListener::bind(&config.bind_addr())

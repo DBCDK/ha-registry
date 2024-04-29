@@ -3,14 +3,21 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-use crate::data::status::{Status, ServerState};
-use axum::{Json, http::StatusCode};
+use std::sync::Arc;
 
-const TEST_STATUS: Status = Status { server_state: ServerState::Healthy };
+use crate::data::status::{Status, ServerState};
+use axum::{http::StatusCode, Extension, Json};
 
 /// Handler for returning the server status.
-pub async fn status() -> Result<Json<Status>, StatusCode> {
-    Ok(Json(TEST_STATUS))
+pub async fn status(
+    Extension(status): Extension<Arc<Status>>
+) -> Result<Json<Status>, StatusCode> {
+    match Arc::into_inner(status) {
+        Some(status) => Ok(Json(status)),
+        None => {
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
+        },
+    }
 }
 // pub async fn status() -> StatusCode {
 //     StatusCode::OK
