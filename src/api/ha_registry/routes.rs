@@ -3,7 +3,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-use axum::{extract::Extension, routing::get, Router};
+use axum::Router;
 
 use super::v1::routes::get_routes as get_v1_routes;
 

@@ -3,8 +3,8 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-use axum::{extract::Extension, routing::get, Router};
+use axum::{routing::get, Router};
 
 pub fn get_routes() -> Router {
-    Router::new().route("/status", get(|| async {"working" }))
+    Router::new().route("/status", get(|| async { "working" }))
 }

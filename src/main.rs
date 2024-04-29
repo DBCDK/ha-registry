@@ -5,7 +5,13 @@
 
 #![deny(clippy::unwrap_used)]
 
-use axum::{http::StatusCode, extract::Extension, response::{Redirect, IntoResponse}, routing::get, Router};
+use axum::{
+    extract::Extension,
+    http::StatusCode,
+    response::{IntoResponse, Redirect},
+    routing::get,
+    Router,
+};
 use tokio::net::TcpListener;
 
 extern crate log;

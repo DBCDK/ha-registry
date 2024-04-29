@@ -163,11 +163,12 @@
         # For `nix develop`:
         devShells.default = pkgs.mkShell {
           inherit (self.checks.${system}.pre-commit-check) shellHook;
-          nativeBuildInputs = with pkgs; [rustup toolchain just zip reuse pkg-config openssl vhs fish statix];
+          nativeBuildInputs = with pkgs; [rustup toolchain just zip reuse pkg-config openssl vhs fish statix clippy];
         };
 
         # For `nix flake check`
         checks = {
+          status = pkgs.callPackage ./nixos/tests/status.nix {inherit packages;};
           pre-commit-check = let
             # some treefmt formatters are not supported in pre-commit-hooks we filter them out for now.
             toFilter =
@@ -201,5 +202,10 @@
           lint = packages.clippy;
         };
       }
-    );
+    )
+    // {
+      nixosModules = {
+        ha-registry = {imports = [./nixos/modules/ha-registry.nix];};
+      };
+    };
 }
