@@ -5,6 +5,8 @@
 
 use axum::{routing::get, Router};
 
+use super::status::{self, handlers::status};
+
 pub fn get_routes() -> Router {
-    Router::new().route("/status", get(|| async { "working" }))
+    Router::new().route("/status", get(status))
 }
