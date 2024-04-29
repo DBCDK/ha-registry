@@ -3,9 +3,10 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-use super::ha_registry::routes::get_routes as get_ha_routes;
-use axum::Router;
+use axum::{extract::Extension, routing::get, Router};
+
+use super::v1::routes::get_routes as get_v1_routes;
 
 pub fn get_routes() -> Router {
-    Router::new().nest("/ha", get_ha_routes())
+    Router::new().nest("/v1", get_v1_routes())
 }

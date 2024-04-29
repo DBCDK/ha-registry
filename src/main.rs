@@ -5,7 +5,7 @@
 
 #![deny(clippy::unwrap_used)]
 
-use axum::{extract::Extension, response::Redirect, routing::get, Router};
+use axum::{http::StatusCode, extract::Extension, response::{Redirect, IntoResponse}, routing::get, Router};
 use tokio::net::TcpListener;
 
 extern crate log;
@@ -19,6 +19,10 @@ use api::routes::get_routes as get_api_routes;
 
 #[allow(unused)]
 use log::{debug, error, info, trace, warn};
+
+async fn handler_404() -> impl IntoResponse {
+    (StatusCode::NOT_FOUND, "404 - not found")
+}
 
 #[tokio::main]
 async fn main() {
@@ -42,6 +46,7 @@ async fn main() {
             get(|| async { Redirect::to("https://github.com/cafkafk/ha-registry") }),
         )
         .merge(get_api_routes())
+        .fallback(handler_404)
         .layer(Extension(config.clone()));
 
     let listener = TcpListener::bind(&config.bind_addr())
