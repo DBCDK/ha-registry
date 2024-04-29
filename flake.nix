@@ -112,29 +112,29 @@
             '';
 
             preInstall = ''
-              installManPage man/rime.1
+              installManPage man/ha-registry.1
               installShellCompletion \
-                --fish man/rime.fish \
-                --bash man/rime.bash \
-                --zsh  man/_rime
+                --fish man/ha-registry.fish \
+                --bash man/ha-registry.bash \
+                --zsh  man/_ha-registry
               mkdir -p $out
             '';
           };
 
           container = pkgs.dockerTools.buildLayeredImage {
-            name = "rime";
+            name = "ha-tregistry";
             tag = "latest";
             contents = [packages.default pkgs.cacert];
             config = {
               Labels = {
-                "org.opencontainers.image.source" = "https://github.com/cafkafk/rime";
-                "org.opencontainers.image.description" = "rime:  Nix Flake Input Versioning";
+                "org.opencontainers.image.source" = "https://github.com/cafkafk/ha-registry";
+                "org.opencontainers.image.description" = "ha-registry: High Availability Container Registry";
                 "org.opencontainers.image.license" = "AGPL-3.0-only";
               };
               Env = [
                 "RUST_LOG=trace"
               ];
-              Cmd = ["/bin/rime"];
+              Cmd = ["/bin/ha-registry"];
             };
           };
 

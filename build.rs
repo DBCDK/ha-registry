@@ -26,10 +26,10 @@ fn main() -> Result<(), Error> {
 
     let mut cmd = build_cli();
     for &shell in Shell::value_variants() {
-        generate_to(shell, &mut cmd, "rime", &outdir)?;
+        generate_to(shell, &mut cmd, "ha-registry", &outdir)?;
     }
 
-    let file = PathBuf::from(&outdir).join("rime.1");
+    let file = PathBuf::from(&outdir).join("ha-registry.1");
     let mut file = File::create(file)?;
 
     Man::new(cmd).render(&mut file)?;
