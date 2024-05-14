@@ -60,6 +60,13 @@ nixosTest {
           };
         };
       };
+
+    db = _: {
+      services.postgresql = {
+        enable = true;
+      };
+    };
+
     haregistry = {...}: {
       imports = [
         ../modules/ha-registry.nix
