@@ -11,3 +11,10 @@ use axum::http::StatusCode;
 pub async fn version_check() -> StatusCode {
     StatusCode::OK
 }
+
+/// Handler for unimplemented API endpoints
+///
+/// See also: https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.2
+pub async fn unimplemented() -> StatusCode {
+    StatusCode::NOT_IMPLEMENTED
+}
