@@ -5,7 +5,7 @@
 
 use axum::{routing::get, Router};
 
-use super::status::{self, handlers::status};
+use super::status::handlers::status;
 
 pub fn get_routes() -> Router {
     Router::new().route("/status", get(status))

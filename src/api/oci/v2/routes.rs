@@ -8,7 +8,7 @@ use axum::{
     Router,
 };
 
-use super::handlers::handlers::*;
+use super::oci::handlers::*;
 
 pub fn get_routes() -> Router {
     Router::new()

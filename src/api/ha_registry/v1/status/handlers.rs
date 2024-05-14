@@ -5,18 +5,14 @@
 
 use std::sync::Arc;
 
-use crate::data::status::{Status, ServerState};
+use crate::data::status::Status;
 use axum::{http::StatusCode, Extension, Json};
 
 /// Handler for returning the server status.
-pub async fn status(
-    Extension(status): Extension<Arc<Status>>
-) -> Result<Json<Status>, StatusCode> {
+pub async fn status(Extension(status): Extension<Arc<Status>>) -> Result<Json<Status>, StatusCode> {
     match Arc::into_inner(status) {
         Some(status) => Ok(Json(status)),
-        None => {
-            Err(StatusCode::INTERNAL_SERVER_ERROR)
-        },
+        None => Err(StatusCode::INTERNAL_SERVER_ERROR),
     }
 }
 // pub async fn status() -> StatusCode {

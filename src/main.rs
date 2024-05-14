@@ -50,7 +50,9 @@ async fn main() {
 
     trace!("{config:#?}");
 
-    let status = Arc::new(Status { server_state: ServerState::Healthy });
+    let status = Arc::new(Status {
+        server_state: ServerState::Healthy,
+    });
 
     let app = Router::new()
         .route(
