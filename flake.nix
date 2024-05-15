@@ -2,6 +2,7 @@
 # SPDX-FileContributor: Christina Sørensen
 #
 # SPDX-License-Identifier: AGPL-3.0-only
+ 
 {
   description = "ha-registry: High Availability Container Registry";
 
