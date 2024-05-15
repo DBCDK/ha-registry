@@ -187,7 +187,7 @@
                   reuse = {
                     enable = true;
                     name = "reuse";
-                    entry = "${pkgs.reuse}/bin/reuse lint";
+                    entry = with pkgs; "${pkgs.reuse}/bin/reuse lint";
                     pass_filenames = false;
                   };
                 };
