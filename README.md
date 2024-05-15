@@ -9,11 +9,11 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 # HA-registry
 
-> [!IMPORTANT]
+>[!IMPORTANT]
 > HA-registry is in an early stage of development, and not recommened for
 > production usage.
 
-> [!NOTE]
+>[!NOTE]
 > HA-registry is experimental, and is subject to API changes until stabilized.
 > Many features still aren't implemented, and it's in no way useful yet.
 
