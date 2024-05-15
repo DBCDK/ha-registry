@@ -162,8 +162,9 @@
 
         # For `nix develop`:
         devShells.default = pkgs.mkShell {
-          inherit (self.checks.${system}.pre-commit-check) shellHook;
+          buildInputs = self.checks.${system}.pre-commit-check.enabledPackages;
           nativeBuildInputs = with pkgs; [rustup toolchain just zip reuse pkg-config openssl vhs fish statix clippy];
+          inherit (self.checks.${system}.pre-commit-check) shellHook;
         };
 
         # For `nix flake check`
@@ -171,10 +172,7 @@
           status = pkgs.callPackage ./nixos/tests/status.nix {inherit packages;};
           pre-commit-check = let
             # some treefmt formatters are not supported in pre-commit-hooks we filter them out for now.
-            toFilter =
-              # HACK: This is a nice hack to not have to manually filter we should keep in mind for a future refactor.
-              # Stolen from eza
-              ["yamlfmt"];
+            toFilter = ["yamlfmt"];
             filterFn = n: _v: (!builtins.elem n toFilter);
             treefmtFormatters = pkgs.lib.mapAttrs (_n: v: {inherit (v) enable;}) (pkgs.lib.filterAttrs filterFn (import ./treefmt.nix).programs);
           in
