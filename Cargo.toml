@@ -16,6 +16,8 @@ rust-version = "1.77.2"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+aws-config = "1.4.0"
+aws-sdk-s3 = "1.29.0"
 axum = { version = "0.7.4", features = ["macros", "original-uri", "json"] }
 bytes = "1.5.0"
 clap = { version = "4.5.1", features = ["cargo"] }

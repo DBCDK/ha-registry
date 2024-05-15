@@ -7,4 +7,3 @@ pub mod routes;
 
 mod ha_registry;
 mod oci;
-mod v1;
