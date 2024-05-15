@@ -5,11 +5,15 @@ SPDX-FileContributor: Christina Sørensen
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
+<div align="center|>
+
 # HA-registry
 > HA-registry is in an early stage of development, and not recommened for
 > production usage.
 
 > HA-registry is experimental, and is subject to API changes until stabilized.
+
+</div>
 
 HA-registry, is a highly available, blazingly fast™ OCI container distribution
 service, written in rust, and leveraging an S3 backend for blob storage and a
