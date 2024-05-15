@@ -9,14 +9,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 # HA-registry
 
->[!IMPORTANT]
-> HA-registry is in an early stage of development, and not recommened for
-> production usage.
-
->[!NOTE]
-> HA-registry is experimental, and is subject to API changes until stabilized.
-> Many features still aren't implemented, and it's in no way useful yet.
-
 </div>
 
 
@@ -27,13 +19,6 @@ SPDX-License-Identifier: AGPL-3.0-only
 >[!NOTE]
 > HA-registry is experimental, and is subject to API changes until stabilized.
 > Many features still aren't implemented, and it's in no way useful yet.
-
-
-> **Note**
-> stuff
-
->**Note**
-> stuff
 
 HA-registry, is a highly available, blazingly fast™ OCI container distribution
 service, written in rust, and leveraging an S3 backend for blob storage and a
