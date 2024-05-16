@@ -83,6 +83,18 @@ nixosTest {
         package = packages.default;
 
         openFirewall = true;
+
+        settings = {
+          s3 = {
+            region = "us-east-1";
+            bucket = "ha-registry";
+            endpoint = "endpoint";
+            credentials = {
+              access_key_id = "stuff";
+              secret_access_key = "stuff";
+            };
+          };
+        };
       };
     };
 

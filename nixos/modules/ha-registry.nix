@@ -10,7 +10,12 @@
 }:
 with lib; let
   cfg = config.services.ha-registry;
+
+  addr = "localhost";
+
   port = 3000;
+
+  settingsFormat = pkgs.formats.json {};
 in {
   options.services.ha-registry = {
     enable = mkEnableOption "ha-registry";
@@ -18,6 +23,32 @@ in {
     package = mkPackageOption pkgs "ha-registry" {};
 
     openFirewall = mkEnableOption "opening the default ports in the firewall for ha-registry";
+
+    settings = mkOption {
+      type = types.submodule {
+        freeformType = settingsFormat.type;
+        options = {
+          addr = mkOption {
+            type = with types; nullOr str;
+            default = addr;
+            description = ''
+              Address to listen on.
+            '';
+          };
+          port = mkOption {
+            type = types.port;
+            default = port;
+            example = 3456;
+            description = ''
+              Port to listen on.
+            '';
+          };
+          description = ''
+            ha-registry configuration as yaml.
+          '';
+        };
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -37,7 +68,7 @@ in {
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [port];
+      allowedTCPPorts = [cfg.settings.port];
     };
 
     meta.maintainers = [cafkafk];
