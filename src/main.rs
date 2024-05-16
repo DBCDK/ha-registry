@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 Christina Sørensen
+// SPDX-FileCopyrightText: 2023-2024 Christina Sørensen
 // SPDX-FileContributor: Christina Sørensen
 //
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -22,6 +22,7 @@ extern crate pretty_env_logger;
 mod api;
 mod cli;
 mod data;
+mod storage;
 
 use api::routes::get_routes as get_api_routes;
 
@@ -35,12 +36,17 @@ async fn handler_404() -> impl IntoResponse {
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> std::io::Result<()> {
     pretty_env_logger::init();
 
     let matches = crate::cli::build_cli().get_matches();
 
     let config;
+
+    if let Some(path) = matches.get_one::<String>("init") {
+        crate::data::Config::gen_example_config(path);
+        return Ok(());
+    }
 
     if let Some(config_file) = matches.get_one::<String>("config") {
         config = crate::data::Config::load(config_file);
@@ -73,4 +79,6 @@ async fn main() {
     axum::serve(listener, app)
         .await
         .expect("failed to serve app");
+
+    Ok(())
 }

@@ -40,6 +40,10 @@ semver culture.
 Other technologies leveraged in the project includes Axum, Tokio, and Nix for
 development shells, packaging, and NixOS VM tests.
 
+### Limitations
+
+- Only S3 support
+
 ### OCI API Compliance
 #### Endpoints
 
