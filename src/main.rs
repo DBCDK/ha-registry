@@ -44,7 +44,7 @@ async fn main() -> std::io::Result<()> {
     let config;
 
     if let Some(path) = matches.get_one::<String>("init") {
-        crate::data::Config::gen_example_config(path);
+        crate::data::Config::gen_example_config(path)?;
         return Ok(());
     }
 
