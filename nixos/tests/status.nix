@@ -65,6 +65,11 @@ nixosTest {
         openFirewall = true;
       };
 
+      systemd.services.ha-registry.environment = {
+        RUST_BACKTRACE = "full";
+        RUST_LOG = "trace";
+      };
+
       services.ha-registry = {
         enable = true;
         package = packages.default;

@@ -11,11 +11,11 @@
 with lib; let
   cfg = config.services.ha-registry;
 
-  addr = "localhost";
+  addr = "127.0.0.1";
 
   port = 3000;
 
-  settingsFormat = pkgs.formats.json {};
+  settingsFormat = pkgs.formats.yaml {};
 in {
   options.services.ha-registry = {
     enable = mkEnableOption "ha-registry";
@@ -25,6 +25,9 @@ in {
     openFirewall = mkEnableOption "opening the default ports in the firewall for ha-registry";
 
     settings = mkOption {
+      description = ''
+        ha-registry configuration as yaml.
+      '';
       type = types.submodule {
         freeformType = settingsFormat.type;
         options = {
@@ -43,9 +46,6 @@ in {
               Port to listen on.
             '';
           };
-          description = ''
-            ha-registry configuration as yaml.
-          '';
         };
       };
     };
@@ -63,7 +63,7 @@ in {
         Restart = "always";
         ExecStart = let
           args = [];
-        in "${cfg.package}/bin/ha-registry ${concatStringsSep " " args}";
+        in "${cfg.package}/bin/ha-registry ${concatStringsSep " " args} --config ${settingsFormat.generate "registry-config.yaml" cfg.settings}";
       };
     };
 

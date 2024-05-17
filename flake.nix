@@ -119,6 +119,8 @@
                 --zsh  man/_ha-registry
               mkdir -p $out
             '';
+
+            meta.mainProgram = "ha-registry";
           };
 
           container = pkgs.dockerTools.buildLayeredImage {
