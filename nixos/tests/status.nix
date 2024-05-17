@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-only
 {
+  lib,
   nixosTest,
   packages,
   ...
@@ -10,62 +11,48 @@
 nixosTest {
   name = "ha-registry status test";
 
-  nodes = {
-    s3 = let
-      s3_port = 3900;
-      rpc_port = 3901;
-      admin_api_port = 3903;
-    in
-      {pkgs, ...}: {
-        users = {
-          groups.garage = {};
-
-          users.garage = {
-            isSystemUser = true;
-            createHome = false;
-            group = "garage";
-          };
-        };
-
-        services = {
-          garage = {
-            enable = true;
-            package = pkgs.garage;
-
-            settings = {
-              #metadata_dir = "/srv/storage/garage/meta";
-              #data_dir = "/srv/storage/garage/data";
-              #metadata_fsync = false; # synchronous mode for the database engine
-
-              db_engine = "lmdb";
-              replication_mode = "none";
-              compression_level = -1;
-
-              # For inter-node comms
-              rpc_bind_addr = "[::]:${builtins.toString rpc_port}";
-              rpc_secret = "4425f5c26c5e11581d3223904324dcb5b5d5dfb14e5e7f35e38c595424f5f1e6";
-              # rpc_public_addr = "127.0.0.1:3901";
-
-              # Standard S3 api endpoint
-              s3_api = {
-                s3_region = "helios";
-                api_bind_addr = "[::]:${builtins.toString s3_port}";
-              };
-
-              # Admin api endpoint
-              admin = {
-                api_bind_addr = "[::]:${builtins.toString admin_api_port}";
-              };
-            };
-          };
-        };
+  nodes = let
+    minioAccessKey = "legit";
+    minioSecretKey = "111-1111111";
+    minio = _: {
+      services.minio = {
+        enable = true;
+        rootCredentialsFile = "/etc/minio.env";
       };
 
-    db = _: {
+      # For testing only - Don't actually do this
+      environment.etc."minio.env".text = ''
+        MINIO_ROOT_USER=${minioAccessKey}
+        MINIO_ROOT_PASSWORD=${minioSecretKey}
+      '';
+
+      networking.firewall.allowedTCPPorts = [9000];
+    };
+    postgres = _: {
+      systemd.services.postgresql.postStart = lib.mkAfter ''
+        $PSQL -tAc 'ALTER DATABASE "registry" OWNER TO "registry"'
+      '';
+
       services.postgresql = {
         enable = true;
+        ensureDatabases = ["registry"];
+        ensureUsers = [
+          {
+            name = "registry";
+          }
+
+          # For testing only - Don't actually do this
+          {
+            name = "root";
+            ensureClauses = {
+              superuser = true;
+            };
+          }
+        ];
       };
     };
+  in {
+    inherit minio postgres;
 
     haregistry = {...}: {
       imports = [
@@ -84,14 +71,18 @@ nixosTest {
 
         openFirewall = true;
 
+        # services.atticd.settings = {
+        #   database.url = "postgresql:///registry?host=/run/postgresql";
+        # };
+
         settings = {
           s3 = {
             region = "us-east-1";
-            bucket = "ha-registry";
-            endpoint = "endpoint";
+            bucket = "registry";
+            endpoint = "http://minio:9000";
             credentials = {
-              access_key_id = "stuff";
-              secret_access_key = "stuff";
+              access_key_id = minioAccessKey;
+              secret_access_key = minioSecretKey;
             };
           };
         };
@@ -113,5 +104,20 @@ nixosTest {
     client1.fail("curl --fail haregistry:3000/ha/")
     client1.fail("curl --fail haregistry:3000/ha/v1")
     client1.fail("curl --fail haregistry:3000/ha/v1/")
+
+    client1.succeed("curl haregistry:3000/v2/")
+
+    minio.succeed("mkdir /var/lib/minio/data/registry")
+    minio.succeed("chown minio: /var/lib/minio/data/registry")
+    client1.wait_until_succeeds("curl http://minio:9000", timeout=20)
+
+    from pathlib import Path
+    import os
+
+    schema = postgres.succeed("pg_dump --schema-only registry")
+
+    schema_path = Path(os.environ.get("out", os.getcwd())) / "schema.sql"
+    with open(schema_path, 'w') as f:
+        f.write(schema)
   '';
 }
