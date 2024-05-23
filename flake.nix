@@ -160,6 +160,30 @@
             mode = "clippy";
             inherit buildInputs;
           };
+
+          distribution-spec = pkgs.buildGoModule rec {
+            name = "distribution-spec";
+            version = "1.1.0";
+
+            src = pkgs.fetchFromGitHub {
+              owner = "opencontainers";
+              repo = "distribution-spec";
+              rev = "v${version}";
+              hash = "sha256-GL28YUwDRicxS65E7SDR/Q3tJOWN4iwgq4AGBjwVPzA=";
+            };
+
+            buildPhase = ''
+              go test -c -o conformance.test
+            '';
+
+            installPhase = ''
+              mkdir -p $out/bin
+              cp conformance.test $out/bin
+            '';
+
+            vendorHash = "sha256-5gn9RpjCALZB/GFjlJHDqPs2fIHl7NJr5QjPmsLnnO4=";
+            modRoot = "conformance";
+          };
         };
 
         # For `nix develop`:
