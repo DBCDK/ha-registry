@@ -59,11 +59,21 @@ in {
       wantedBy = ["multi-user.target"];
       after = ["network-online.target"];
 
+      environment = {
+        # FIXME: consider doing this directly in aws-sdk it may have
+        # implications for direct AWS usage thou
+        AWS_EC2_METADATA_DISABLED = "true";
+      };
+
       serviceConfig = {
         Restart = "always";
         ExecStart = let
           args = [];
         in "${cfg.package}/bin/ha-registry ${concatStringsSep " " args} --config ${settingsFormat.generate "registry-config.yaml" cfg.settings}";
+        # Ensure registry isn't considered started before listening for
+        # connections
+        Type = "notify";
+        NotifyAccess = "main";
       };
     };
 

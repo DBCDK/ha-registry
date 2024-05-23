@@ -5,7 +5,7 @@
 
 #![deny(clippy::unwrap_used)]
 
-use std::sync::Arc;
+use std::{error::Error, ops::Deref, sync::Arc};
 
 use axum::{
     extract::Extension,
@@ -29,14 +29,14 @@ use api::routes::get_routes as get_api_routes;
 #[allow(unused)]
 use log::{debug, error, info, trace, warn};
 
-use crate::data::status::{ServerState, Status};
+use crate::{data::status::ServerStatus, storage::s3::S3Backend};
 
 async fn handler_404() -> impl IntoResponse {
     (StatusCode::NOT_FOUND, "404 - not found")
 }
 
 #[tokio::main]
-async fn main() -> std::io::Result<()> {
+async fn main() -> Result<(), Box<dyn Error>> {
     pretty_env_logger::init();
 
     let matches = crate::cli::build_cli().get_matches();
@@ -49,16 +49,38 @@ async fn main() -> std::io::Result<()> {
     }
 
     if let Some(config_file) = matches.get_one::<String>("config") {
-        config = crate::data::Config::load(config_file);
+        config = Arc::new(tokio::sync::RwLock::new(crate::data::Config::load(
+            config_file,
+        )));
     } else {
-        config = crate::data::Config::load(data::CONFIG);
+        config = Arc::new(tokio::sync::RwLock::new(crate::data::Config::load(
+            data::CONFIG,
+        )));
     }
 
     trace!("{config:#?}");
 
-    let status = Arc::new(Status {
-        server_state: ServerState::Healthy,
-    });
+    let s3backend = S3Backend::new(
+        config
+            .clone()
+            .read()
+            .await
+            .deref()
+            .s3
+            .as_ref()
+            .expect("failed to load s3 backed from config"),
+    )
+    .await;
+
+    trace!("{s3backend:#?}");
+
+    // FIXME: We currently don't mutate the server status state, but we will in
+    // the future, and we want the type checker to notice this being a problem,
+    // so we keep this around.
+    #[allow(unused_mut)]
+    let mut status = ServerStatus::new();
+
+    dbg!(trace!("{:#?}", status));
 
     let app = Router::new()
         .route(
@@ -70,11 +92,21 @@ async fn main() -> std::io::Result<()> {
         .layer(Extension(status))
         .layer(Extension(config.clone()));
 
-    let listener = TcpListener::bind(&config.bind_addr())
+    let listener = TcpListener::bind(&config.clone().read().await.bind_addr())
         .await
         .expect("failed to bind");
 
-    info!("Listening on http://{:#?}", &config.bind_addr());
+    info!(
+        "Listening on http://{:#?}",
+        &config.clone().read().await.bind_addr()
+    );
+
+    // Notify systemd that we're done getting ready to serve users
+    #[cfg(target_os = "linux")]
+    match sd_notify::notify(true, &[sd_notify::NotifyState::Ready]) {
+        Ok(_) => (),
+        Err(e) => panic!("Failed to notify systemd we're ready: {e}"),
+    };
 
     axum::serve(listener, app)
         .await

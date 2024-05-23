@@ -17,7 +17,11 @@ use serde::{Deserialize, Serialize};
 /// The S3 remote file storage backend.
 #[derive(Debug)]
 pub struct S3Backend {
+    // FIXME: Will be used in the future
+    #[allow(dead_code)]
     client: Client,
+    // FIXME: Will be used in the future
+    #[allow(dead_code)]
     config: S3StorageConfig,
 }
 
@@ -73,20 +77,21 @@ impl Default for S3CredentialsConfig {
 }
 
 impl S3Backend {
-    pub async fn new(config: S3StorageConfig) -> Result<Self, Box<dyn Error>> {
-        let s3_config = Self::config_builder(&config)
+    pub async fn new(config: &S3StorageConfig) -> Result<Self, Box<dyn Error>> {
+        let s3_config = Self::config_builder(config)
             .await?
             .region(Region::new(config.region.to_owned()))
             .build();
 
         Ok(Self {
             client: Client::from_conf(s3_config),
-            config,
+            config: config.clone(),
         })
     }
 
     async fn config_builder(config: &S3StorageConfig) -> Result<S3ConfigBuilder, Box<dyn Error>> {
-        // FIXME: load_from_env deprecation warning from aws-sdk
+        // FIXME: load_from_env deprecation warning from aws-sdk, should be fixed eventually
+        #[allow(deprecated)]
         let shared_config = aws_config::load_from_env().await;
         let mut builder = S3ConfigBuilder::from(&shared_config);
 

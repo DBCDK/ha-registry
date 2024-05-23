@@ -3,7 +3,10 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
+use std::sync::Arc;
+
 use serde::{Deserialize, Serialize};
+use tokio::sync::RwLock;
 
 /// The state of the server.
 ///
@@ -12,8 +15,9 @@ use serde::{Deserialize, Serialize};
 /// - Unhealthy: ha-registry is not working
 ///
 /// May be expanded later.
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Default)]
 pub enum ServerState {
+    #[default]
     Healthy,
     Degraded,
     Unhealthy,
@@ -21,7 +25,17 @@ pub enum ServerState {
 
 /// Status struct exposed over status endpoint. Used to see the current state of
 /// ha-registry.
-#[derive(Serialize, Deserialize)]
-pub struct Status {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ServerStatus {
     pub server_state: ServerState,
+}
+
+impl ServerStatus {
+    /// Creates a new server status struct as an atomic referenced counted
+    /// mutex, with default state.
+    pub fn new() -> Arc<RwLock<Self>> {
+        Arc::new(RwLock::new(Self {
+            server_state: ServerState::default(),
+        }))
+    }
 }

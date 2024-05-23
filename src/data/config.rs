@@ -34,7 +34,7 @@ pub struct Config {
 
     /// The S3 storage configuration
     #[serde(skip_serializing_if = "Option::is_none")]
-    s3: Option<S3StorageConfig>,
+    pub s3: Option<S3StorageConfig>,
 }
 
 impl Default for Config {

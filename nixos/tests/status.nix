@@ -81,6 +81,8 @@ nixosTest {
         # };
 
         settings = {
+          addr = "0.0.0.0";
+          port = 3000;
           s3 = {
             region = "us-east-1";
             bucket = "registry";
@@ -101,9 +103,15 @@ nixosTest {
   testScript = ''
     start_all()
 
-    haregistry.wait_for_open_port(3000)
-    haregistry.wait_for_unit("ha-registry.service")
+    minio.wait_for_unit("minio.service")
+    postgres.wait_for_unit("postgresql.service")
 
+    haregistry.wait_for_unit("ha-registry.service")
+    haregistry.wait_for_open_port(3000)
+
+    haregistry.wait_until_succeeds("curl haregistry:3000/ha/v1/status", timeout=120)
+
+    client1.wait_until_succeeds("curl haregistry:3000/ha/v1/status", timeout=120)
     client1.succeed("curl haregistry:3000/ha/v1/status")
     client1.fail("curl --fail haregistry:3000/ha")
     client1.fail("curl --fail haregistry:3000/ha/")
@@ -123,6 +131,6 @@ nixosTest {
 
     schema_path = Path(os.environ.get("out", os.getcwd())) / "schema.sql"
     with open(schema_path, 'w') as f:
-        f.write(schema)
+      f.write(schema)
   '';
 }

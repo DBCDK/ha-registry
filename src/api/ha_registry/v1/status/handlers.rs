@@ -3,18 +3,17 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 
-use std::sync::Arc;
+use std::{ops::Deref, sync::Arc};
 
-use crate::data::status::Status;
-use axum::{http::StatusCode, Extension, Json};
+use crate::data::status::ServerStatus;
+use axum::{
+    response::{IntoResponse, Response},
+    Extension, Json,
+};
 
 /// Handler for returning the server status.
-pub async fn status(Extension(status): Extension<Arc<Status>>) -> Result<Json<Status>, StatusCode> {
-    match Arc::into_inner(status) {
-        Some(status) => Ok(Json(status)),
-        None => Err(StatusCode::INTERNAL_SERVER_ERROR),
-    }
+pub async fn status(
+    Extension(status): Extension<Arc<tokio::sync::RwLock<ServerStatus>>>,
+) -> Response {
+    Json(status.clone().read().await.deref()).into_response()
 }
-// pub async fn status() -> StatusCode {
-//     StatusCode::OK
-// }
