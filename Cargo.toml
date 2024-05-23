@@ -28,7 +28,6 @@ log = "0.4.21"
 pretty_env_logger = "0.5.0"
 regex = "1.10.3"
 reqwest = { version = "0.11.24", features = ["json"] }
-sd-notify = "0.4.1"
 semver = "1.0.22"
 serde = { version = "1.0.197", features = ["derive"] }
 serde_json = "1.0.114"
@@ -39,3 +38,6 @@ tokio = { version = "1.36.0", features = ["macros", "rt-multi-thread", "sync"] }
 clap = { version = "4.5.1", features = ["cargo"] }
 clap_complete = "4"
 clap_mangen = "0.2.20"
+
+[target.'cfg(target_os = "linux")'.dependencies]
+sd-notify = "0.4.1"

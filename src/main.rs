@@ -80,7 +80,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     #[allow(unused_mut)]
     let mut status = ServerStatus::new();
 
-    dbg!(trace!("{:#?}", status));
+    trace!("{:#?}", status);
 
     let app = Router::new()
         .route(
