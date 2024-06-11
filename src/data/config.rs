@@ -58,7 +58,7 @@ impl Config {
         let yaml = fs::read_to_string(path)?;
 
         debug!("deserialized yaml from config file");
-        let config = serde_yaml::from_str(&yaml)?;
+        let config = serde_norway::from_str(&yaml)?;
 
         Ok(config)
     }
@@ -89,8 +89,8 @@ impl Config {
     /// Turns `Config::default()` into a yaml file at `path`, to assist as a skeleton for
     /// configuration.
     pub fn gen_example_config(path: &String) -> Result<(), Error> {
-        let data =
-            serde_yaml::to_string(&Config::default()).expect("failed to deserialize self to yaml");
+        let data = serde_norway::to_string(&Config::default())
+            .expect("failed to deserialize self to yaml");
         write(path, data)
     }
 }
