@@ -22,6 +22,7 @@ const ADDR: &str = "0.0.0.0";
 /// Default port for registry
 const PORT: &str = "3000";
 
+/// Top-level config struct
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
     /// The address of the server
@@ -37,6 +38,8 @@ pub struct Config {
     pub s3: Option<S3StorageConfig>,
 }
 
+// We do our best to create useful values for testing, but we can't default s3
+// storage, and we're currently (2024-06-10) designing ha-registry for s3 only.
 impl Default for Config {
     fn default() -> Self {
         Self {
@@ -83,6 +86,8 @@ impl Config {
             .expect("failed to parse the bind address")
     }
 
+    /// Turns `Config::default()` into a yaml file at `path`, to assist as a skeleton for
+    /// configuration.
     pub fn gen_example_config(path: &String) -> Result<(), Error> {
         let data =
             serde_yaml::to_string(&Config::default()).expect("failed to deserialize self to yaml");
