@@ -225,7 +225,7 @@
 
           # Additional dev-shell environment variables can be set directly
           # MY_CUSTOM_DEVELOPMENT_VAR = "something else";
-          packages = with pkgs; [rustup toolchain just zip reuse pkg-config openssl statix] ++ self.checks.${system}.pre-commit-check.enabledPackages;
+          packages = with pkgs; [rustup toolchain just zip reuse pkg-config openssl statix convco] ++ self.checks.${system}.pre-commit-check.enabledPackages;
           inherit (self.checks.${system}.pre-commit-check) shellHook;
         };
 
