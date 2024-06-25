@@ -9,6 +9,14 @@ on:
   pull_request:
   push:
     branches: [ main ]
+    paths:
+      - '.github/workflows/test.yml'
+      - 'src/**'
+      - 'Cargo.*'
+      - "*.toml"
+      - "flake.*"
+      - "*.nix"
+      - "*.rs"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
