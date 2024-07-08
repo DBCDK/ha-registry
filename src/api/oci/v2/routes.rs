@@ -24,7 +24,7 @@ pub fn get_routes() -> Router {
         // end-4b: has ?digest=<digest>
         // end-11: ?mount=<digest>&from=<other_name>
         // TODO: unimplemented
-        .route("/:name/blobs/uploads/", post(unimplemented))
+        .route("/:name/blobs/uploads/", post(init_push))
         // end-5
         // TODO: unimplemented
         .route("/:name/blobs/uploads/:reference", patch(unimplemented))
