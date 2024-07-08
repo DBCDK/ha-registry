@@ -30,7 +30,7 @@ pub fn get_routes() -> Router {
         .route("/:name/blobs/uploads/:reference", patch(unimplemented))
         // end-6: has ?digest=<digest>
         // TODO: unimplemented
-        .route("/:name/blobs/uploads/:reference", put(unimplemented))
+        .route("/:name/blobs/uploads/:reference", put(push_blob))
         // end-7
         // TODO: unimplemented
         .route("/:name/manifests/:reference", put(unimplemented))
