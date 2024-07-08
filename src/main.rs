@@ -69,9 +69,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
             .as_ref()
             .expect("failed to load s3 backed from config"),
     )
-    .await;
+    .await?;
 
     trace!("{s3backend:#?}");
+
+    s3backend.init_blob_store().await;
+
+    let s3backend = Arc::new(s3backend);
 
     // FIXME: We currently don't mutate the server status state, but we will in
     // the future, and we want the type checker to notice this being a problem,
@@ -88,6 +92,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         )
         .merge(get_api_routes())
         .fallback(handler_404)
+        .layer(Extension(s3backend))
         .layer(Extension(status))
         .layer(Extension(config.clone()));
 
