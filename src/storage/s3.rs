@@ -12,8 +12,8 @@
 use std::error::Error;
 
 use aws_sdk_s3::{
-    config::Builder as S3ConfigBuilder,
-    config::{Credentials, Region},
+    config::{Builder as S3ConfigBuilder, Credentials, Region},
+    operation::put_object::PutObjectOutput,
     Client,
 };
 use serde::{Deserialize, Serialize};
@@ -21,8 +21,6 @@ use serde::{Deserialize, Serialize};
 /// The S3 remote file storage backend.
 #[derive(Debug)]
 pub struct S3Backend {
-    // FIXME: Will be used in the future
-    #[allow(dead_code)]
     client: Client,
     // FIXME: Will be used in the future
     #[allow(dead_code)]
@@ -114,5 +112,57 @@ impl S3Backend {
         }
 
         Ok(builder)
+    }
+
+    #[allow(dead_code)]
+    pub fn get_client(self: &Self) -> Client {
+        self.client.clone()
+    }
+
+    pub async fn push_blob(
+        self: &Self,
+        digest: String,
+        blob: axum::body::Bytes,
+    ) -> Result<PutObjectOutput, Box<dyn Error>> {
+        let prefix = &digest[..2];
+        let key = format!("blobs/sha256/{}/{}", prefix, digest);
+        self.client
+            .put_object()
+            .bucket("v2")
+            .key(&key)
+            .body(blob.into())
+            .send()
+            .await
+            .map_err(|e| {
+                log::warn!("Couldn't push {key} to blob store");
+                Box::<dyn Error>::from(e)
+            })
+    }
+
+    pub async fn init_blob_store(self: &Self) {
+        // Check if blob store is already available
+        let blob_store = self.client.head_bucket().bucket("v2").send().await;
+
+        if let Err(e) = blob_store {
+            if e.into_service_error().is_not_found() {
+                let bucket_info = self
+                    .client
+                    .create_bucket()
+                    .bucket("v2")
+                    .send()
+                    .await
+                    .map_err(|error| {
+                        log::warn!("Could not initialize blob store.");
+                        // No storage backend, so exit main thread.
+                        panic!("{error}")
+                    })
+                    .unwrap();
+
+                log::trace!(
+                    "Initialized new blobstore bucket at {}",
+                    bucket_info.location().unwrap()
+                );
+            }
+        }
     }
 }
