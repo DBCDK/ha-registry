@@ -40,4 +40,4 @@ clap_complete = "4"
 clap_mangen = "0.2.22"
 
 [target.'cfg(target_os = "linux")'.dependencies]
-sd-notify = "0.4.1"
+sd-notify = "0.4.2"
