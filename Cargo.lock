@@ -2017,9 +2017,9 @@ dependencies = [
 
 [[package]]
 name = "serde_norway"
-version = "0.9.36"
+version = "0.9.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b0e5465ed327a4410b68a26953dcc60f2eec1b7cf5137ea1cc5866e9e8fb8039"
+checksum = "5da93ab33d70364e4b844cd69c3f7a458242ecf17f8a4f9e99b7732259f67386"
 dependencies = [
  "indexmap",
  "itoa",
