@@ -13,4 +13,9 @@
     taplo.enable = true; # toml
     yamlfmt.enable = true; # yaml
   };
+  settings = {
+    formatter = {
+      shellcheck.excludes = [".envrc"];
+    };
+  };
 }
