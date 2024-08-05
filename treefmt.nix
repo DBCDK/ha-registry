@@ -5,7 +5,7 @@
 {
   projectRootFile = "Cargo.toml";
   programs = {
-    alejandra.enable = true; # nix
+    nixpkgs-fmt.enable = true; # nix
     statix.enable = true; # nix static analysis
     deadnix.enable = true; # find dead nix code
     rustfmt.enable = true; # rust
@@ -15,7 +15,7 @@
   };
   settings = {
     formatter = {
-      shellcheck.excludes = [".envrc"];
+      shellcheck.excludes = [ ".envrc" ];
     };
   };
 }
