@@ -2,7 +2,7 @@
 # SPDX-FileContributor: Christina Sørensen
 #
 # SPDX-License-Identifier: EUPL-1.2
-{...}: {
+{ ... }: {
   imports = [
     ./ha-registry.nix
   ];

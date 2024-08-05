@@ -2,11 +2,10 @@
 # SPDX-FileContributor: Christina Sørensen
 #
 # SPDX-License-Identifier: EUPL-1.2
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib; let
   cfg = config.services.ha-registry;
@@ -15,12 +14,13 @@ with lib; let
 
   port = 3000;
 
-  settingsFormat = pkgs.formats.yaml {};
-in {
+  settingsFormat = pkgs.formats.yaml { };
+in
+{
   options.services.ha-registry = {
     enable = mkEnableOption "ha-registry";
 
-    package = mkPackageOption pkgs "ha-registry" {};
+    package = mkPackageOption pkgs "ha-registry" { };
 
     openFirewall = mkEnableOption "opening the default ports in the firewall for ha-registry";
 
@@ -55,9 +55,9 @@ in {
     systemd.services.ha-registry = {
       enable = true;
       description = "ha-registry";
-      wants = ["network-online.target"];
-      wantedBy = ["multi-user.target"];
-      after = ["network-online.target"];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
 
       environment = {
         # FIXME: consider doing this directly in aws-sdk it may have
@@ -67,9 +67,11 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart = let
-          args = [];
-        in "${cfg.package}/bin/ha-registry ${concatStringsSep " " args} --config ${settingsFormat.generate "registry-config.yaml" cfg.settings}";
+        ExecStart =
+          let
+            args = [ ];
+          in
+          "${cfg.package}/bin/ha-registry ${concatStringsSep " " args} --config ${settingsFormat.generate "registry-config.yaml" cfg.settings}";
         # Ensure registry isn't considered started before listening for
         # connections
         Type = "notify";
@@ -78,9 +80,9 @@ in {
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [cfg.settings.port];
+      allowedTCPPorts = [ cfg.settings.port ];
     };
 
-    meta.maintainers = [cafkafk];
+    meta.maintainers = [ cafkafk ];
   };
 }

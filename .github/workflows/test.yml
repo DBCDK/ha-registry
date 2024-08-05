@@ -4,11 +4,10 @@
 # SPDX-License-Identifier: EUPL-1.2
 
 name: test
-
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - '.github/workflows/test.yml'
       - 'src/**'
@@ -17,15 +16,12 @@ on:
       - "flake.*"
       - "*.nix"
       - "*.rs"
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
-
 env:
   CARGO_TERM_COLOR: always
   RUSTFLAGS: -Dwarnings
-
 jobs:
   tests:
     runs-on: ${{ matrix.os }}
@@ -35,10 +31,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - run: rustup toolchain install stable --profile minimal
       - uses: Swatinem/rust-cache@v2
-
       - run: cargo fmt --check
       - run: cargo clippy --workspace
       - run: cargo build --workspace
