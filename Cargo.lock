@@ -117,9 +117,9 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "aws-config"
-version = "1.5.1"
+version = "1.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2ac9889352d632214df943e26740c46a0f3da6e329fbd28164fe7ae1b061da7b"
+checksum = "d93c287bea7af470c96d21e1dcf4b207ac760932477ebdf47720232047991685"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -160,9 +160,9 @@ dependencies = [
 
 [[package]]
 name = "aws-runtime"
-version = "1.2.3"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "36978815abdd7297662bf906adff132941a02ecf425bc78fac7d90653ce87560"
+checksum = "9a4a5e448145999d7de17bf44a886900ecb834953408dae8aaf90465ce91c1dd"
 dependencies = [
  "aws-credential-types",
  "aws-sigv4",
@@ -219,9 +219,9 @@ dependencies = [
 
 [[package]]
 name = "aws-sdk-sso"
-version = "1.31.0"
+version = "1.32.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7833dd5b061741825b8531360789bbd74fc365674601d3e9a79914310be320f9"
+checksum = "478ca2bd3e86c871854be2e9aaf01bb9a1fa08e05619d42bb53681d436317744"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -241,9 +241,9 @@ dependencies = [
 
 [[package]]
 name = "aws-sdk-ssooidc"
-version = "1.32.0"
+version = "1.33.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c531346d4f36874b74ea82978a03011ab413b007b841029a8c30a48f18cc3f37"
+checksum = "d9e8c910bb3c6144f6e81f44a7e2db4432eac41434bf61c7cf74a18dd45d9606"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -263,9 +263,9 @@ dependencies = [
 
 [[package]]
 name = "aws-sdk-sts"
-version = "1.31.0"
+version = "1.32.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca214135f34b4841050f6466d4a56743e02aa63169f1b5e77161043f20653400"
+checksum = "d34d8ea0b83fee44f8e1628b57dde00fb2261b1c85297d3bccf728fcd3d2dbf5"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
