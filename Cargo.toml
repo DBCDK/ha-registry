@@ -17,7 +17,7 @@ rust-version = "1.79"
 
 [dependencies]
 aws-config = "1.5.2"
-aws-sdk-s3 = "1.36.0"
+aws-sdk-s3 = "1.37.0"
 axum = { version = "0.7.5", features = ["macros", "original-uri", "json"] }
 bytes = "1.7.1"
 clap = { version = "4.5.16", features = ["cargo"] }
