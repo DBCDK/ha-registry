@@ -66,10 +66,7 @@ impl Config {
     #[inline]
     pub fn load(path: &str) -> Self {
         trace!("path: {path:#?}");
-        match Self::new(path) {
-            Ok(config) => config,
-            Err(_) => Config::default(),
-        }
+        Self::new(path).unwrap_or_default()
     }
 
     pub fn bind_addr(&self) -> std::net::SocketAddr {
