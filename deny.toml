@@ -105,6 +105,7 @@ allow = [
   "Unicode-DFS-2016",
   "BSD-3-Clause",
   "EUPL-1.2",
+  "Zlib",
 ]
 # The confidence threshold for detecting a license from license text.
 # The higher the value, the more closely the license text must be to the
