@@ -8,8 +8,8 @@
   inputs = {
     # until https://nixpk.gs/pr-tracker.html?pr=361052 lands
     # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
 
     systems.url = "github:nix-systems/default";
 
