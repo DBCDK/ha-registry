@@ -4,7 +4,7 @@
 
 name: outdated
 on:
-  schedule: [{cron: "45 4 * * *"}]
+  schedule: [{cron: "45 4 * * 7"}]
 jobs:
   outdated:
     name: Outdated
