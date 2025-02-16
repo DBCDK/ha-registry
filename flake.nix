@@ -26,14 +26,12 @@
     flake-utils = {
       url = "github:numtide/flake-utils";
       inputs = {
-        nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";
       };
     };
 
     crane = {
       url = "github:ipetkov/crane";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     fenix = {
@@ -56,7 +54,6 @@
       url = "github:oxalica/rust-overlay";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
       };
     };
 
@@ -65,7 +62,6 @@
       inputs = {
         nixpkgs.follows = "nixpkgs";
         nixpkgs-stable.follows = "nixpkgs-stable";
-        flake-utils.follows = "flake-utils";
         flake-compat.follows = "flake-compat";
         gitignore.follows = "gitignore";
       };
