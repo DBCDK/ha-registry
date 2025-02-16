@@ -173,7 +173,7 @@
                 contents = [ packages.default pkgs.cacert ];
                 config = {
                   Labels = {
-                    "org.opencontainers.image.source" = "https://github.com/cafkafk/ha-registry";
+                    "org.opencontainers.image.source" = "https://github.com/DBCDK/ha-registry";
                     "org.opencontainers.image.description" = "ha-registry: High Availability Container Registry";
                     "org.opencontainers.image.license" = "EUPL-1.2";
                   };
